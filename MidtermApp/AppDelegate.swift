@@ -2,8 +2,6 @@
 //  AppDelegate.swift
 //  MidtermApp
 //
-//  Created by Jesuly MC on 13/6/18.
-//
 
 import UIKit
 import CoreData
@@ -15,7 +13,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         // Override point for customization after application launch.
+        window = UIWindow()
+        window?.makeKeyAndVisible()
+        
+        // tableView inside navigationController
+        let navController = UINavigationController(rootViewController: ViewController())
+        window?.rootViewController = navController
+        
         return true
     }
 
@@ -89,4 +95,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
