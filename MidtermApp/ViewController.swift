@@ -16,9 +16,39 @@ class ViewController: UITableViewController {
         ["Bussiness Card C1","Bussiness Card C2","Bussiness Card C3"]
     ]
     
+    // to make the animation goes right and goes left
+    var showIndexPaths = false
+    
+    // add @objc to make it work
+    @objc func handleShowIndexPath() {
+        
+        //build all the indexPaths we want to reload
+        var indexPathsToReload = [IndexPath]()
+        
+        // nested loop to reload all the elements
+        for section in bussinessCards.indices {
+            for row in bussinessCards[section].indices {
+                let indexPath = IndexPath(row: row, section: section)
+                indexPathsToReload.append(indexPath)
+            }
+            
+        }
+        
+        // reverse the value
+        showIndexPaths = !showIndexPaths
+        
+        // then the animation will be different every time the code is executed
+        let animationStyle = showIndexPaths ? UITableViewRowAnimation.right : UITableViewRowAnimation.left
+        
+        tableView.reloadRows(at: indexPathsToReload, with: animationStyle)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show IndexPath", style: .plain, target: self, action: #selector(handleShowIndexPath))
         
         navigationItem.title = "Bussiness Cards"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -32,7 +62,8 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = UILabel()
         label.text = "Header"
-        label.backgroundColor = UIColor.lightGray
+        label.textColor = UIColor.white
+        label.backgroundColor = UIColor.black
         
         return label
     }
@@ -52,6 +83,7 @@ class ViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
         let bussinessCards = self.bussinessCards[indexPath.section][indexPath.row]
+        
         cell.textLabel?.text = bussinessCards
         
         return cell
