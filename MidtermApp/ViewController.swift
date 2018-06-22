@@ -10,35 +10,38 @@ class ViewController: UITableViewController {
     let cellId = "cellId"
     
     // two dimensional array
-    let bussinessCards = [
-        ["Bussiness Card A1","Bussiness Card A2","Bussiness Card A3"],
-        ["Bussiness Card B1","Bussiness Card B2","Bussiness Card B3"],
-        ["Bussiness Card C1","Bussiness Card C2","Bussiness Card C3"]
+    var bussinessCards = [
+        
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card A1","Bussiness Card A2","Bussiness Card A3"]),
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card B1","Bussiness Card B2","Bussiness Card B3"]),
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card C1","Bussiness Card C2","Bussiness Card C3"])
+        
     ]
     
     // to make the animation goes right and goes left
-    var showIndexPaths = false
+    var showDetails = false
     
     // add @objc to make it work
-    @objc func handleShowIndexPath() {
+    @objc func handleShowDetails() {
         
         //build all the indexPaths we want to reload
         var indexPathsToReload = [IndexPath]()
         
         // nested loop to reload all the elements
         for section in bussinessCards.indices {
-            for row in bussinessCards[section].indices {
-                let indexPath = IndexPath(row: row, section: section)
-                indexPathsToReload.append(indexPath)
+            if bussinessCards[section].isExpanded { // app crashed without this
+                for row in bussinessCards[section].bussinessCards.indices {
+                    let indexPath = IndexPath(row: row, section: section)
+                    indexPathsToReload.append(indexPath)
+                }
             }
-            
         }
         
         // reverse the value
-        showIndexPaths = !showIndexPaths
+        showDetails = !showDetails
         
         // then the animation will be different every time the code is executed
-        let animationStyle = showIndexPaths ? UITableViewRowAnimation.right : UITableViewRowAnimation.left
+        let animationStyle = showDetails ? UITableViewRowAnimation.right : UITableViewRowAnimation.left
         
         tableView.reloadRows(at: indexPathsToReload, with: animationStyle)
         
@@ -48,7 +51,7 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show IndexPath", style: .plain, target: self, action: #selector(handleShowIndexPath))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Show Details", style: .plain, target: self, action: #selector(handleShowDetails))
         
         navigationItem.title = "Bussiness Cards"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -60,12 +63,51 @@ class ViewController: UITableViewController {
     
     // divider for different sections
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let label = UILabel()
-        label.text = "Header"
-        label.textColor = UIColor.white
-        label.backgroundColor = UIColor.black
         
-        return label
+        let button = UIButton(type: .system)
+        button.setTitle("Close", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .black
+        
+        button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
+        
+        // to specify the section inside handleExpandClose function
+        button.tag = section
+        
+        return button
+        
+    }
+    
+    // add @objc to make it work
+    @objc func handleExpandClose(button: UIButton) {
+
+        // getting the section
+        let section = button.tag
+        
+        var indexPaths = [IndexPath]()
+        for row in bussinessCards[section].bussinessCards.indices {
+            let indexPath = IndexPath(row: row, section: section)
+            indexPaths.append(indexPath)
+        }
+        
+        let isExpanded = bussinessCards[section].isExpanded
+        // reverse the value
+        bussinessCards[section].isExpanded = !isExpanded
+        
+        button.setTitle(isExpanded ? "Open" : "Close", for: .normal)
+        
+        if isExpanded {
+            tableView.deleteRows(at: indexPaths, with: .fade)
+        }
+        else {
+            tableView.insertRows(at: indexPaths, with: .fade)
+        }
+        
+    }
+    
+    // height for the divider
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 36
     }
     
     // number of sections
@@ -75,16 +117,24 @@ class ViewController: UITableViewController {
     
     // number of rows in section
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bussinessCards[section].count
+        if !bussinessCards[section].isExpanded {
+            return 0 //return 0 when is close
+        }
+        return bussinessCards[section].bussinessCards.count
     }
     
     // cell for row
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
-        let bussinessCards = self.bussinessCards[indexPath.section][indexPath.row]
+        let bussinessCards = self.bussinessCards[indexPath.section].bussinessCards[indexPath.row]
         
-        cell.textLabel?.text = bussinessCards
+        if showDetails {
+            cell.textLabel?.text = bussinessCards // details
+        }
+        else{
+            cell.textLabel?.text = bussinessCards // no details
+        }
         
         return cell
         

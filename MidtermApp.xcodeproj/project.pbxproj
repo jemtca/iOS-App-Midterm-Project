@@ -13,6 +13,7 @@
 		EB7E7AFA20D1CC2F00C4C56F /* MidtermApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB7E7AF820D1CC2F00C4C56F /* MidtermApp.xcdatamodeld */; };
 		EB7E7AFC20D1CC2F00C4C56F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB7E7AFB20D1CC2F00C4C56F /* Assets.xcassets */; };
 		EB7E7AFF20D1CC2F00C4C56F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7E7AFD20D1CC2F00C4C56F /* LaunchScreen.storyboard */; };
+		EB8569AC20DCE3E10018E5B1 /* ExpandableSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8569AB20DCE3E10018E5B1 /* ExpandableSections.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		EB7E7AFB20D1CC2F00C4C56F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB7E7AFE20D1CC2F00C4C56F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB7E7B0020D1CC2F00C4C56F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EB8569AB20DCE3E10018E5B1 /* ExpandableSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableSections.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				EB7E7AFD20D1CC2F00C4C56F /* LaunchScreen.storyboard */,
 				EB7E7B0020D1CC2F00C4C56F /* Info.plist */,
 				EB7E7AF820D1CC2F00C4C56F /* MidtermApp.xcdatamodeld */,
+				EB8569AB20DCE3E10018E5B1 /* ExpandableSections.swift */,
 			);
 			path = MidtermApp;
 			sourceTree = "<group>";
@@ -140,6 +143,7 @@
 				EB7E7AF420D1CC2F00C4C56F /* ViewController.swift in Sources */,
 				EB7E7AFA20D1CC2F00C4C56F /* MidtermApp.xcdatamodeld in Sources */,
 				EB7E7AF220D1CC2F00C4C56F /* AppDelegate.swift in Sources */,
+				EB8569AC20DCE3E10018E5B1 /* ExpandableSections.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
