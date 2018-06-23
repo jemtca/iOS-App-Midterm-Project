@@ -9,12 +9,32 @@ class ViewController: UITableViewController {
 
     let cellId = "cellId"
     
+    // custom delegation
+    func someMethodIwantToCall(cell: UITableViewCell) {
+        
+        // saving the cell position
+        let indexPathTapped = tableView.indexPath(for: cell)
+        // saving the bubussiness card (string)
+        let bussinessCard = bussinessCards[indexPathTapped!.section].bussinessCards[indexPathTapped!.row]
+        
+        let hasStart = bussinessCard.hasStart
+        
+        // hasStart -> !hasStart
+        bussinessCards[indexPathTapped!.section].bussinessCards[indexPathTapped!.row].hasStart = !hasStart
+        
+        // kind of reload the view after clicking on the start
+        cell.accessoryView?.tintColor = hasStart ? UIColor.orange : UIColor.lightGray
+        
+    }
+    
     // two dimensional array
     var bussinessCards = [
         
-        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card A1","Bussiness Card A2","Bussiness Card A3"]),
-        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card B1","Bussiness Card B2","Bussiness Card B3"]),
-        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card C1","Bussiness Card C2","Bussiness Card C3"])
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card A1","Bussiness Card A2","Bussiness Card A3"].map{BussinessCard(name: $0, hasStart: false)}),
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card B1","Bussiness Card B2","Bussiness Card B3"].map{BussinessCard(name: $0, hasStart: false)}),
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card C1","Bussiness Card C2","Bussiness Card C3"].map{BussinessCard(name: $0, hasStart: false)}),
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card D1","Bussiness Card D2","Bussiness Card D3"].map{BussinessCard(name: $0, hasStart: false)}),
+        ExpandableSections(isExpanded: true, bussinessCards: ["Bussiness Card E1","Bussiness Card E2","Bussiness Card E3"].map{BussinessCard(name: $0, hasStart: false)})
         
     ]
     
@@ -41,7 +61,7 @@ class ViewController: UITableViewController {
         showDetails = !showDetails
         
         // then the animation will be different every time the code is executed
-        let animationStyle = showDetails ? UITableViewRowAnimation.right : UITableViewRowAnimation.left
+        let animationStyle = showDetails ? UITableViewRowAnimation.left : UITableViewRowAnimation.right
         
         tableView.reloadRows(at: indexPathsToReload, with: animationStyle)
         
@@ -56,8 +76,11 @@ class ViewController: UITableViewController {
         navigationItem.title = "Bussiness Cards"
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        // dequeue process requires tableView register itself first
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        // dequeue process requires tableView register itself first!
+
+        // change this method to have a custom cell
+        // UITableViewCell.self -> BussinessCardCell.self
+        tableView.register(BussinessCardCell.self, forCellReuseIdentifier: cellId)
         
     }
     
@@ -68,6 +91,9 @@ class ViewController: UITableViewController {
         button.setTitle("Close", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
+        
+        // move the button to the right edge
+        //button.frame.origin = CGPoint(x: , y: ) ?
         
         button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         
@@ -125,15 +151,19 @@ class ViewController: UITableViewController {
     
     // cell for row
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! BussinessCardCell
+        cell.link = self
         
         let bussinessCards = self.bussinessCards[indexPath.section].bussinessCards[indexPath.row]
         
+        // change the start color
+        cell.accessoryView?.tintColor = bussinessCards.hasStart ? UIColor.orange : UIColor.lightGray
+        
         if showDetails {
-            cell.textLabel?.text = bussinessCards // details
+            cell.textLabel?.text = "\(bussinessCards.name) with details..." // details
         }
         else{
-            cell.textLabel?.text = bussinessCards // no details
+            cell.textLabel?.text = bussinessCards.name // no details
         }
         
         return cell

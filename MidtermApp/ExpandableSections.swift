@@ -6,8 +6,11 @@
 import Foundation
 
 struct ExpandableSections {
-    
     var isExpanded: Bool
-    let bussinessCards: [String]
-    
+    var bussinessCards: [BussinessCard]
+}
+
+struct BussinessCard {
+    let name: String
+    var hasStart: Bool
 }
